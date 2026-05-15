@@ -5,6 +5,7 @@ from schemas import RetrievedChunk, ChunkMetadata, Citation, RagAnswer
 from functools import lru_cache
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from pathlib import Path
+from llm import invoke_llm
 
 def retrieve(query, k=None, filters=None, collection_name=None):
     hits = get_vector_store(collection_name).similarity_search_with_score(
@@ -122,7 +123,7 @@ def answer(question, k=None, filters=None, collection_name=None):
             answer="Tôi không có đủ thông tin trong ngữ cảnh được cung cấp để trả lời."
         )
 
-    prompt = render_prompt(ANSWER_TEMPLATE, question=question, chunks=chunks)
+    prompt = render_prompt("answer.jinja2", question=question, chunks=chunks)
     text = invoke_llm(prompt)
 
     return RagAnswer(
