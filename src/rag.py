@@ -89,7 +89,7 @@ def scroll_all(collection_name, scroll_filter=None, batch_size=100):
 PROMPTS_DIR = Path(__file__).parent / "prompts"
 
 @lru_cache(maxsize=1)
-def _jinja_env():
+def jinja_env():
     return Environment(
         loader=FileSystemLoader(str(PROMPTS_DIR)),
         autoescape=False, 
@@ -99,7 +99,7 @@ def _jinja_env():
     )
 
 def render_prompt(template_name, **context):
-    return _jinja_env().get_template(template_name).render(**context)
+    return jinja_env().get_template(template_name).render(**context)
 
 def format_citations(chunks):
     return [
