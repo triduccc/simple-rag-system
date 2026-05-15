@@ -55,7 +55,7 @@ def filters_to_qdrant(filters):
     for field, value in flat.items():
         if field == "filenames" and isinstance(value, list):
             conditions.append(qmodels.FieldCondition(
-                key="metadata.filename", match=qmodels.MatchAny(any=value)
+                key="metadata.file_name", match=qmodels.MatchAny(any=value)
             ))
         elif isinstance(value, (str, int)):
             conditions.append(qmodels.FieldCondition(

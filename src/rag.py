@@ -37,7 +37,7 @@ def fetch_all_chunks(filters=None, collection_name=None):
                 )
 
     return sorted(results, key=lambda r: (
-        r.metadata.filename,
+        r.metadata.file_name,
         r.metadata.page,
         int(r.metadata.chunk_id.rsplit(":", 1)[-1]),
     ))
@@ -106,7 +106,7 @@ def format_citations(chunks):
         Citation(
             source_index=i,
             source_marker=f"S{i}",
-            filename=c.metadata.filename,
+            filename=c.metadata.file_name,
             page=c.metadata.page,
             section=c.metadata.section,
             chunk_id=c.metadata.chunk_id,

@@ -40,8 +40,8 @@ def build_chunks(pdf_paths, chunk_size=None, chunk_overlap=None, chunker=None):
     for path in pdf_paths:
         page_docs.extend(load_pdf(path))
 
-    splitter = chunker or splitter(chunk_size, chunk_overlap)
-    chunks = splitter.split_documents(page_docs)
+    text_splitter = chunker or splitter(chunk_size, chunk_overlap)
+    chunks = text_splitter.split_documents(page_docs)
     per_doc_counter = defaultdict(int)
 
     for chunk in chunks:

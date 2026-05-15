@@ -12,9 +12,10 @@ from datetime import datetime
 
 @lru_cache(maxsize=1)
 def get_embeddings():
+    device = "cpu" if settings.hf_device < 0 else settings.hf_device
     return HuggingFaceEmbeddings(
         model_name=settings.embedding_model,
-        model_kwargs={"device": settings.hf_device},
+        model_kwargs={"device": device},
         encode_kwargs={"normalize_embeddings": True},
     )
 
@@ -32,7 +33,7 @@ def get_vector_store(collection_name=None):
 
 INDEXED_PAYLOAD_FIELDS = {
     "metadata.document_id": qmodels.PayloadSchemaType.KEYWORD,
-    "metadata.filename": qmodels.PayloadSchemaType.KEYWORD,
+    "metadata.file_name": qmodels.PayloadSchemaType.KEYWORD,
     "metadata.page": qmodels.PayloadSchemaType.INTEGER,
     }
 
