@@ -1,5 +1,7 @@
 from pydantic import BaseModel, Field
 from typing import Optional
+from datetime import datetime
+from filters import MetadataFilter
 
 class ChunkMetadata(BaseModel):
     document_id: str
@@ -27,5 +29,23 @@ class RagAnswer(BaseModel):
     answer: str
     citations: list[Citation] = Field(default_factory=list)
     chunks: list[RetrievedChunk] = Field(default_factory=list)
+
+
+class AskRequest(BaseModel):
+    question: str
+    filters: MetadataFilter | None = None
+    k: int | None = Field(default=None, ge=1, le=64)
+
+
+class UploadResponse(BaseModel):
+    filename: str
+    chunks_indexed: int
+
+
+class DocumentInfo(BaseModel):
+    filename: str
+    document_id: str
+    size_bytes: int
+    modified_at: datetime
 
     

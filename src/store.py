@@ -1,11 +1,14 @@
 from langchain_huggingface import HuggingFaceEmbeddings
 from config import settings
 from functools import lru_cache
-from qdrant_client import QdrantClient, QdrantVectorStore
+from qdrant_client import QdrantClient
+from langchain_qdrant import QdrantVectorStore
 from qdrant_client.http import models as qmodels
 import uuid
 from pathlib import Path
-from indexing import build_chunks
+from indexing import build_chunks, document_id
+from schemas import DocumentInfo, UploadResponse
+from datetime import datetime
 
 @lru_cache(maxsize=1)
 def get_embeddings():
@@ -82,4 +85,19 @@ def save_and_ingest_pdf(file_bytes, filename):
 
     ensure_collection(recreate=False)
     chunks = build_chunks([dest])
-    return {"filename": safe_name, "chunks_indexed": index_chunks(chunks)}
+    return UploadResponse(filename=safe_name, chunks_indexed=index_chunks(chunks))
+
+
+def list_documents():
+    docs = []
+    for path in discover_pdfs():
+        stat = path.stat()
+        docs.append(
+            DocumentInfo(
+                filename=path.name,
+                document_id=document_id(path),
+                size_bytes=stat.st_size,
+                modified_at=datetime.fromtimestamp(stat.st_mtime),
+            )
+        )
+    return docs
