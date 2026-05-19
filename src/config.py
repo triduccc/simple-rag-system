@@ -21,18 +21,13 @@ class Settings(BaseSettings):
 
     embedding_model: str = "GreenNode/GreenNode-Embedding-Large-VN-Mixed-V1"
 
-    llm_provider: Literal["hf_local", "gemini", "vllm"] = "gemini"
+    llm_provider: Literal["gemini"] = "gemini"
     llm_temperature: float = Field(default=0.1, ge=0.0, le=2.0)
 
-    hf_model: str = "/mnt/pretrained_fm/Qwen_Qwen3-4B-Instruct-2507"
     hf_device: int = -1
-    hf_max_new_tokens: int = Field(default=2048, ge=1)
 
     gemini_model: str = "gemini-2.5-flash"
     google_api_key: str | None = Field(default=None, alias="GOOGLE_API_KEY")
-
-    vllm_api_base: str = "http://localhost:8001/v1"
-    vllm_api_key: str = "EMPTY"
 
     summarize_batch_size: int = Field(default=10, ge=1)
     summarize_retrieval_k: int = Field(default=12, ge=1, le=128)
@@ -48,7 +43,7 @@ class Settings(BaseSettings):
             raise ValueError("chunk_overlap must be smaller than chunk_size.")
         if self.hf_device < -1:
             raise ValueError("hf_device must be -1 for CPU or >= 0 for CUDA.")
-        if self.llm_provider == "gemini" and not self.google_api_key:
+        if not self.google_api_key:
             raise ValueError("GOOGLE_API_KEY is required when llm_provider='gemini'.")
         return self
 
