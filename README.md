@@ -1,4 +1,4 @@
-RAG Learning System (Gemini-only)
+# Simple RAG System 
 
 Overview
 - Ingests PDFs from the data/ folder or via the API upload endpoint.
@@ -17,13 +17,19 @@ Requirements
 Setup
 1) Create and activate a virtual environment.
 2) Install dependencies:
-	pip install -r requirements.txt
+```
+pip install -r requirements.txt
+```
 3) Create a .env file with your key:
-	GOOGLE_API_KEY=your_key_here
+```
+GOOGLE_API_KEY=your_key_here
+```
 
 Run the API
 From the repository root:
+```
 uvicorn src.interfaces.api:app --reload
+```
 
 Key endpoints
 - GET /health
